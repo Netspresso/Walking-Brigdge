@@ -175,9 +175,6 @@ beam_distance = 1.5
 # Lists of point for all curves
 ptList = []
 n_of_curve = 18
-ncurve = []
-curvesegment = []
-designCurve = []
 component = br_width + beam_width + pipe_diameter
 
 for i in range(0, n_of_curve):

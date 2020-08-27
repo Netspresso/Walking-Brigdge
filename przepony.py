@@ -13,8 +13,6 @@ apex.setting.setApplicationSettingsGeometry(
     applicationSettingsGeometry=applicationSettingsGeometry)
 model_1 = apex.currentModel()
 
-import math
-
 
 class Curves:
     # Class defining curves A
@@ -42,6 +40,16 @@ def a(tmax, Step, component):
         radius.append((-5 / (4 * math.pi)) * t + 10 + component)
         t += Step
     return radius
+
+
+def a0(tmax, Step):
+    """center"""
+    radius = []
+    t = 0.0
+    while t <= tmax:
+        radius.append((0))
+        t += Step
+        return radius
 
 
 def b(tmax, Step, component):
@@ -90,7 +98,7 @@ pr_height = -0.15
 # Lists of point for all curves
 ptList_p = []
 
-n_of_curve = 20
+n_of_curve = 21
 ncurve = []
 curveSegment = []
 designCurve = []
@@ -98,11 +106,10 @@ designCurve = []
 for i in range(0, n_of_curve):
     ptList_p.append([])
 # Do przeróbki:
-Curves(a(range_a, slow_step, -br_width), b(range_b, slow_step, -br_width), v,
-       0, ptList_p[0])
+Curves(a0(range_a, slow_step), a0(range_b, slow_step), v, 0, ptList_p[0])
 # Do przeróbki:
-Curves(a(range_a, slow_step, -br_width), b(range_b, slow_step, -br_width), v,
-       pr_height, ptList_p[1])
+Curves(a0(range_a, slow_step), a0(range_b, slow_step), v, pr_height - 0.4,
+       ptList_p[1])
 # //
 Curves(a(range_a, slow_step, plinth), b(range_b, slow_step, plinth), v,
        ibeam_height, ptList_p[2])
@@ -159,7 +166,7 @@ Curves(a(range_a, slow_step, 0), b(range_b, slow_step, 0), v, 0, ptList_p[19])
 Curves(a(range_a, slow_step, -br_width), b(range_b, slow_step, -br_width), v,
        0, ptList_p[20])
 
-size = len(ptList_p[0])
+size = len(ptList_p[10])
 new_ptList = []
 n_ncurve = []
 
