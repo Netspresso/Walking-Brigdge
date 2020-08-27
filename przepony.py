@@ -3,14 +3,14 @@ from apex.construct import Point3D, Point2D
 from apex.geometry import createPointXYZ, createCurve3DNurb
 import math
 
-
-apex.setScriptUnitSystem(unitSystemName = r'''mm-kg-s-N''')
+apex.setScriptUnitSystem(unitSystemName=r'''mm-kg-s-N''')
 applicationSettingsGeometry = apex.setting.ApplicationSettingsGeometry()
 applicationSettingsGeometry.createGeometryInNewPart = apex.setting.CreateGeometryInNewPart.CurrentPart
 applicationSettingsGeometry.geometryTessellationIsWatertight = False
 applicationSettingsGeometry.geometryEdgeTesselationTolerance = apex.setting.GeometryTessellationTolerance.Medium
 applicationSettingsGeometry.geometryFaceTesselationTolerance = apex.setting.GeometryTessellationTolerance.Medium
-apex.setting.setApplicationSettingsGeometry(applicationSettingsGeometry = applicationSettingsGeometry)
+apex.setting.setApplicationSettingsGeometry(
+    applicationSettingsGeometry=applicationSettingsGeometry)
 model_1 = apex.currentModel()
 
 import math
@@ -24,10 +24,11 @@ class Curves:
         count = len(a)
         z = range(0, count)
         for i in z:
-            curves.x = a[i] * math.cos(t) - (5 * t) / (4 * math.pi) + 15
-            curves.y = b[i] * math.sin(t)
-            curves.z = Velocity * t + Distance
-            ListPoint.append(createPointXYZ(x=curves.x, y=curves.y, z=curves.z).asPoint())
+            self.x = a[i] * math.cos(t) - (5 * t) / (4 * math.pi) + 15
+            self.y = b[i] * math.sin(t)
+            self.z = Velocity * t + Distance
+            ListPoint.append(
+                createPointXYZ(x=self.x, y=self.y, z=self.z).asPoint())
             t += math.pi / 4.0
 
 
@@ -54,6 +55,7 @@ def b(tmax, Step, component):
 
     return radius
 
+
 def linspace(low, up, leng):
     """function creating a linear space from [low] to [up] using [leng] number of elements"""
     list = []
@@ -62,6 +64,7 @@ def linspace(low, up, leng):
         list.append(low)
         low = low + step
     return list
+
 
 # Velocity of growing curves
 v = 2.0 / math.pi
@@ -93,54 +96,80 @@ curveSegment = []
 designCurve = []
 
 for i in range(0, n_of_curve):
-    ptList_p.append(List[Point]())
-
-Curves(a(range_a, slow_step, -br_width), b(range_b, slow_step, -br_width), v, 0, ptList_p[0])
-Curves(a(range_a, slow_step, -br_width), b(range_b, slow_step, -br_width), v, pr_height, ptList_p[1])
-Curves(a(range_a, slow_step, plinth), b(range_b, slow_step, plinth), v, ibeam_height, ptList_p[2])
-Curves(a(range_a, slow_step, spacing + plinth), b(range_b, slow_step, spacing + plinth), v, ibeam_height, ptList_p[3])
-Curves(a(range_a, slow_step, 2.0 * spacing + plinth), b(range_b, slow_step, 2.0 * spacing + plinth), v, ibeam_height,
+    ptList_p.append([])
+# Do przeróbki:
+Curves(a(range_a, slow_step, -br_width), b(range_b, slow_step, -br_width), v,
+       0, ptList_p[0])
+# Do przeróbki:
+Curves(a(range_a, slow_step, -br_width), b(range_b, slow_step, -br_width), v,
+       pr_height, ptList_p[1])
+# //
+Curves(a(range_a, slow_step, plinth), b(range_b, slow_step, plinth), v,
+       ibeam_height, ptList_p[2])
+Curves(a(range_a, slow_step, spacing + plinth),
+       b(range_b, slow_step, spacing + plinth), v, ibeam_height, ptList_p[3])
+Curves(a(range_a, slow_step, 2.0 * spacing + plinth),
+       b(range_b, slow_step, 2.0 * spacing + plinth), v, ibeam_height,
        ptList_p[4])
-Curves(a(range_a, slow_step, 3.0 * spacing + plinth), b(range_b, slow_step, 3.0 * spacing + plinth), v, ibeam_height,
+Curves(a(range_a, slow_step, 3.0 * spacing + plinth),
+       b(range_b, slow_step, 3.0 * spacing + plinth), v, ibeam_height,
        ptList_p[5])
-Curves(a(range_a, slow_step, beam_distance + plinth), b(range_b, slow_step, beam_distance + plinth), v, obeam_height,
+Curves(a(range_a, slow_step, beam_distance + plinth),
+       b(range_b, slow_step, beam_distance + plinth), v, obeam_height,
        ptList_p[6])
-Curves(a(range_a, slow_step, beam_distance + plinth + spacing), b(range_b, slow_step, beam_distance + plinth + spacing),
-       v, obeam_height, ptList_p[7])
+Curves(a(range_a, slow_step, beam_distance + plinth + spacing),
+       b(range_b, slow_step, beam_distance + plinth + spacing), v,
+       obeam_height, ptList_p[7])
 Curves(a(range_a, slow_step, beam_distance + plinth + 2.0 * spacing),
-       b(range_b, slow_step, beam_distance + plinth + 2.0 * spacing), v, obeam_height, ptList_p[8])
+       b(range_b, slow_step, beam_distance + plinth + 2.0 * spacing), v,
+       obeam_height, ptList_p[8])
 Curves(a(range_a, slow_step, beam_distance + plinth + 3.0 * spacing),
-       b(range_b, slow_step, beam_distance + plinth + 3.0 * spacing), v, obeam_height, ptList_p[9])
-Curves(a(range_a, slow_step, beam_distance + 2.0 * plinth + 3.0 * spacing + br_width),
-       b(range_b, slow_step, beam_distance + 2.0 * plinth + 3.0 * spacing + br_width), v, pr_height, ptList_p[10])
-Curves(a(range_a, slow_step, beam_distance + 2.0 * plinth + 3.0 * spacing + br_width),
-       b(range_b, slow_step, beam_distance + 2.0 * plinth + 3.0 * spacing + br_width), v, 0, ptList_p[11])
+       b(range_b, slow_step, beam_distance + plinth + 3.0 * spacing), v,
+       obeam_height, ptList_p[9])
+Curves(
+    a(range_a, slow_step,
+      beam_distance + 2.0 * plinth + 3.0 * spacing + br_width),
+    b(range_b, slow_step,
+      beam_distance + 2.0 * plinth + 3.0 * spacing + br_width), v, pr_height,
+    ptList_p[10])
+Curves(
+    a(range_a, slow_step,
+      beam_distance + 2.0 * plinth + 3.0 * spacing + br_width),
+    b(range_b, slow_step,
+      beam_distance + 2.0 * plinth + 3.0 * spacing + br_width), v, 0,
+    ptList_p[11])
 Curves(a(range_a, slow_step, beam_distance + 2.0 * plinth + 3.0 * spacing),
-       b(range_b, slow_step, beam_distance + 2.0 * plinth + 3.0 * spacing), v, 0, ptList_p[12])
+       b(range_b, slow_step, beam_distance + 2.0 * plinth + 3.0 * spacing), v,
+       0, ptList_p[12])
 Curves(a(range_a, slow_step, beam_distance + plinth + 2.0 * spacing),
-       b(range_b, slow_step, beam_distance + plinth + 2.0 * spacing), v, 0, ptList_p[13])
-Curves(a(range_a, slow_step, beam_distance + plinth + spacing), b(range_b, slow_step, beam_distance + plinth + spacing),
-       v, 0, ptList_p[14])
-Curves(a(range_a, slow_step, beam_distance), b(range_b, slow_step, beam_distance), v, 0, ptList_p[15])
-Curves(a(range_a, slow_step, 3.0 * spacing + 2.0 * plinth), b(range_b, slow_step, 3.0 * spacing + 2.0 * plinth), v, 0,
-       ptList_p[16])
-Curves(a(range_a, slow_step, 2.0 * spacing + plinth), b(range_b, slow_step, 2.0 * spacing + plinth), v, 0, ptList_p[17])
-Curves(a(range_a, slow_step, spacing + plinth), b(range_b, slow_step, spacing + plinth), v, 0, ptList_p[18])
+       b(range_b, slow_step, beam_distance + plinth + 2.0 * spacing), v, 0,
+       ptList_p[13])
+Curves(a(range_a, slow_step, beam_distance + plinth + spacing),
+       b(range_b, slow_step, beam_distance + plinth + spacing), v, 0,
+       ptList_p[14])
+Curves(a(range_a, slow_step, beam_distance),
+       b(range_b, slow_step, beam_distance), v, 0, ptList_p[15])
+Curves(a(range_a, slow_step, 3.0 * spacing + 2.0 * plinth),
+       b(range_b, slow_step, 3.0 * spacing + 2.0 * plinth), v, 0, ptList_p[16])
+Curves(a(range_a, slow_step, 2.0 * spacing + plinth),
+       b(range_b, slow_step, 2.0 * spacing + plinth), v, 0, ptList_p[17])
+Curves(a(range_a, slow_step, spacing + plinth),
+       b(range_b, slow_step, spacing + plinth), v, 0, ptList_p[18])
 Curves(a(range_a, slow_step, 0), b(range_b, slow_step, 0), v, 0, ptList_p[19])
+Curves(a(range_a, slow_step, -br_width), b(range_b, slow_step, -br_width), v,
+       0, ptList_p[20])
 
 size = len(ptList_p[0])
 new_ptList = []
 n_ncurve = []
 
 for nr_przepony in range(0, size):
-    new_ptList.append(List[Point]())
-
-for nr_przepony in range(0, size):
+    new_ptList.append([])
     for point in ptList_p:
-        new_ptList[nr_przepony].Add(point[nr_przepony])
+        new_ptList[nr_przepony].append(point[nr_przepony])
 
-for Curve in range(0, len(ptList)):
-    Lista = ptList[Curve]
+for Curve in range(0, len(new_ptList)):
+    Lista = new_ptList[Curve]
     n = len(Lista)
     deg = 1
     m = n + deg + 1

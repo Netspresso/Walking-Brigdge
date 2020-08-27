@@ -25,11 +25,11 @@ class curves:
         count = len(a)
         z = range(0, count)
         for i in z:
-            curves.x = a[i] * math.cos(t) - (5 * t) / (4 * math.pi) + 15
-            curves.y = b[i] * math.sin(t)
-            curves.z = Velocity * t + Distance
+            self.x = a[i] * math.cos(t) - (5 * t) / (4 * math.pi) + 15
+            self.y = b[i] * math.sin(t)
+            self.z = Velocity * t + Distance
             ListPoint.append(
-                createPointXYZ(x=curves.x, y=curves.y, z=curves.z).asPoint())
+                createPointXYZ(x=self.x, y=self.y, z=self.z).asPoint())
             t += 0.1
 
 
@@ -41,15 +41,14 @@ class curvesF:
         count = len(a)
         z = range(0, count)
         for i in z:
-            curvesF.x = a[i] * math.cos(t) - (5 * t) / (4 * math.pi) + 15
-            curvesF.y = b[i] * math.sin(t)
+            self.x = a[i] * math.cos(t) - (5 * t) / (4 * math.pi) + 15
+            self.y = b[i] * math.sin(t)
             if t <= math.pi / 8.0:
-                curvesF.z = 9.6 / math.pi * t - 0.95 + Distance
+                self.z = 9.6 / math.pi * t - 0.95 + Distance
             else:
-                curvesF.z = 2.0 / math.pi * t + Distance
+                self.z = 2.0 / math.pi * t + Distance
             ListPoint.append(
-                createPointXYZ(x=curvesF.x, y=curvesF.y,
-                               z=curvesF.z).asPoint())
+                createPointXYZ(x=self.x, y=self.y, z=self.z).asPoint())
             t += 0.1
 
 
