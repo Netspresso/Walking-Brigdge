@@ -43,7 +43,7 @@ n_of_curve = 2
 for i in range(0, n_of_curve):
     ptList.append([])
 
-Elipsa(1.5, 0.75, 0, 10.5, ptList[0])
+Elipsa(3.5, 0.75, 0, 12.5, ptList[0])
 Elipsa(1.75 / 2, 0.75, 10, 9.875, ptList[1])
 
 for elipsa in range(0, len(ptList)):

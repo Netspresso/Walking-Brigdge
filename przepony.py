@@ -30,6 +30,22 @@ class Curves:
             t += math.pi / 4.0
 
 
+class Knots:
+    # Class defining curves A
+
+    def __init__(self, a, b, Velocity, Distance, ListPoint):
+        t = 0
+        count = len(a)
+        z = range(0, count)
+        for i in z:
+            self.x = a[i] * math.cos(t) + 15
+            self.y = b[i] * math.sin(t)
+            self.z = Velocity * t + Distance
+            ListPoint.append(
+                createPointXYZ(x=self.x, y=self.y, z=self.z).asPoint())
+            t += math.pi / 4.0
+
+
 # Functions:
 def a(tmax, Step, component):
     """Inner radius(f) (from center to the beam)"""
@@ -45,11 +61,11 @@ def a(tmax, Step, component):
 def a0(tmax, Step):
     """center"""
     radius = []
-    t = 0.0
+    t = 0
     while t <= tmax:
-        radius.append((0))
+        radius.append(0)
         t += Step
-        return radius
+    return radius
 
 
 def b(tmax, Step, component):
@@ -99,81 +115,78 @@ pr_height = -0.15
 ptList_p = []
 
 n_of_curve = 21
-ncurve = []
-curveSegment = []
-designCurve = []
 
 for i in range(0, n_of_curve):
     ptList_p.append([])
 # Do przeróbki:
-Curves(a0(range_a, slow_step), a0(range_b, slow_step), v, 0, ptList_p[0])
+
 # Do przeróbki:
 Curves(a0(range_a, slow_step), a0(range_b, slow_step), v, pr_height - 0.4,
-       ptList_p[1])
+       ptList_p[0])
 # //
 Curves(a(range_a, slow_step, plinth), b(range_b, slow_step, plinth), v,
-       ibeam_height, ptList_p[2])
+       ibeam_height, ptList_p[1])
 Curves(a(range_a, slow_step, spacing + plinth),
-       b(range_b, slow_step, spacing + plinth), v, ibeam_height, ptList_p[3])
+       b(range_b, slow_step, spacing + plinth), v, ibeam_height, ptList_p[2])
 Curves(a(range_a, slow_step, 2.0 * spacing + plinth),
        b(range_b, slow_step, 2.0 * spacing + plinth), v, ibeam_height,
-       ptList_p[4])
+       ptList_p[3])
 Curves(a(range_a, slow_step, 3.0 * spacing + plinth),
        b(range_b, slow_step, 3.0 * spacing + plinth), v, ibeam_height,
-       ptList_p[5])
+       ptList_p[4])
 Curves(a(range_a, slow_step, beam_distance + plinth),
        b(range_b, slow_step, beam_distance + plinth), v, obeam_height,
-       ptList_p[6])
+       ptList_p[5])
 Curves(a(range_a, slow_step, beam_distance + plinth + spacing),
        b(range_b, slow_step, beam_distance + plinth + spacing), v,
-       obeam_height, ptList_p[7])
+       obeam_height, ptList_p[6])
 Curves(a(range_a, slow_step, beam_distance + plinth + 2.0 * spacing),
        b(range_b, slow_step, beam_distance + plinth + 2.0 * spacing), v,
-       obeam_height, ptList_p[8])
+       obeam_height, ptList_p[7])
 Curves(a(range_a, slow_step, beam_distance + plinth + 3.0 * spacing),
        b(range_b, slow_step, beam_distance + plinth + 3.0 * spacing), v,
-       obeam_height, ptList_p[9])
+       obeam_height, ptList_p[8])
 Curves(
     a(range_a, slow_step,
       beam_distance + 2.0 * plinth + 3.0 * spacing + br_width),
     b(range_b, slow_step,
       beam_distance + 2.0 * plinth + 3.0 * spacing + br_width), v, pr_height,
-    ptList_p[10])
+    ptList_p[9])
 Curves(
     a(range_a, slow_step,
       beam_distance + 2.0 * plinth + 3.0 * spacing + br_width),
     b(range_b, slow_step,
       beam_distance + 2.0 * plinth + 3.0 * spacing + br_width), v, 0,
-    ptList_p[11])
+    ptList_p[10])
 Curves(a(range_a, slow_step, beam_distance + 2.0 * plinth + 3.0 * spacing),
        b(range_b, slow_step, beam_distance + 2.0 * plinth + 3.0 * spacing), v,
-       0, ptList_p[12])
+       0, ptList_p[11])
 Curves(a(range_a, slow_step, beam_distance + plinth + 2.0 * spacing),
        b(range_b, slow_step, beam_distance + plinth + 2.0 * spacing), v, 0,
-       ptList_p[13])
+       ptList_p[12])
 Curves(a(range_a, slow_step, beam_distance + plinth + spacing),
        b(range_b, slow_step, beam_distance + plinth + spacing), v, 0,
-       ptList_p[14])
+       ptList_p[13])
 Curves(a(range_a, slow_step, beam_distance),
-       b(range_b, slow_step, beam_distance), v, 0, ptList_p[15])
+       b(range_b, slow_step, beam_distance), v, 0, ptList_p[14])
 Curves(a(range_a, slow_step, 3.0 * spacing + 2.0 * plinth),
-       b(range_b, slow_step, 3.0 * spacing + 2.0 * plinth), v, 0, ptList_p[16])
+       b(range_b, slow_step, 3.0 * spacing + 2.0 * plinth), v, 0, ptList_p[15])
 Curves(a(range_a, slow_step, 2.0 * spacing + plinth),
-       b(range_b, slow_step, 2.0 * spacing + plinth), v, 0, ptList_p[17])
+       b(range_b, slow_step, 2.0 * spacing + plinth), v, 0, ptList_p[16])
 Curves(a(range_a, slow_step, spacing + plinth),
-       b(range_b, slow_step, spacing + plinth), v, 0, ptList_p[18])
-Curves(a(range_a, slow_step, 0), b(range_b, slow_step, 0), v, 0, ptList_p[19])
+       b(range_b, slow_step, spacing + plinth), v, 0, ptList_p[17])
+Curves(a(range_a, slow_step, 0), b(range_b, slow_step, 0), v, 0, ptList_p[18])
 Curves(a(range_a, slow_step, -br_width), b(range_b, slow_step, -br_width), v,
-       0, ptList_p[20])
+       0, ptList_p[19])
+Curves(a0(range_a, slow_step), a0(range_b, slow_step), v, 0, ptList_p[20])
 
 size = len(ptList_p[10])
 new_ptList = []
-n_ncurve = []
 
 for nr_przepony in range(0, size):
     new_ptList.append([])
-    for point in ptList_p:
-        new_ptList[nr_przepony].append(point[nr_przepony])
+    for list in ptList_p:
+        new_ptList[nr_przepony].append(list[nr_przepony])
 
 for Curve in range(0, len(new_ptList)):
     Lista = new_ptList[Curve]
@@ -183,3 +196,10 @@ for Curve in range(0, len(new_ptList)):
     controlPoints = Lista
     knotPoints = linspace(0, 1, m)
     createCurve3DNurb(controlPoints, knotPoints, deg).asCurve()
+
+for i in range(21, 38):
+    _target = apex.EntityCollection()
+    part_1 = apex.getPart(pathName="Model/Part 1")
+    curve_1 = part_1.getCurve(name="Curve {}".format(i))
+    _target.extend(curve_1.getEdges())
+    result = apex.geometry.fillerSurface(target=_target)
