@@ -48,3 +48,25 @@ def odstep_slupa(t):
         return 3
     elif (t >= 4 * math.pi and t < 5 * math.pi):
         return -2 / math.pi * t + 12
+
+
+def ap(tmax, Step, component):
+    """Inner radius(f) (from center to the beam)"""
+    radius = []
+
+    t = 0
+    while t <= tmax:
+        radius.append((-5 / (4 * math.pi)) * t + 10 - component(t))
+        t += Step
+    return radius
+
+
+def b_p(tmax, Step, component):
+    """Inner radius(f) (from center to the beam)"""
+    radius = []
+
+    t = 0
+    while t <= tmax:
+        radius.append((-5 / (4 * math.pi)) * t + 7.5 - component(t))
+        t += Step
+    return radius

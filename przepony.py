@@ -3,7 +3,7 @@ from apex.construct import Point3D, Point2D
 from apex.geometry import createPointXYZ, createCurve3DNurb
 import math
 from config import Curve as C
-from curves import a, b, linspace, odstep_slupa
+from curves import a, b, linspace, odstep_slupa, ap, b_p
 
 apex.setScriptUnitSystem(unitSystemName=r'''mm-kg-s-N''')
 applicationSettingsGeometry = apex.setting.ApplicationSettingsGeometry()
@@ -33,27 +33,6 @@ class Curves:
 
 
 # functions
-def ap(tmax, Step, component):
-    """Inner radius(f) (from center to the beam)"""
-    radius = []
-
-    t = 0
-    while t <= tmax:
-        radius.append((-5 / (4 * math.pi)) * t + 10 - component(t))
-        t += Step
-    return radius
-
-
-def b_p(tmax, Step, component):
-    """Inner radius(f) (from center to the beam)"""
-    radius = []
-
-    t = 0
-    while t <= tmax:
-        radius.append((-5 / (4 * math.pi)) * t + 7.5 - component(t))
-        t += Step
-    return radius
-
 
 # Lists of point for all curves
 ptList_p = []
