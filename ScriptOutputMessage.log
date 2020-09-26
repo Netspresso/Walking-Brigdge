@@ -1,10 +1,2 @@
-Python exception encountered running script.
-Traceback (most recent call last):
-  File "<string>", line 3, in <module>
-  File "D:/workspace/Aksjator/Macros/Macro 1.py", line 33, in <module>
-    curve_1 = part_1.getCurve(name="Curve {}".format(i))
-  File "<string>", line 4357, in getCurve
-RuntimeError: getCurve() : Curve 39 not found.
-
-**************************************
-Output (Prior to Exception):
+File: D:/workspace/Aksjator/Macros/punkty-i-krzywe.py 
+Output:

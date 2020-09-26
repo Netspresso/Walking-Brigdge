@@ -30,22 +30,6 @@ class Curves:
             t += math.pi / 4.0
 
 
-class Knots:
-    # Class defining curves A
-
-    def __init__(self, a, b, Velocity, Distance, ListPoint):
-        t = 0
-        count = len(a)
-        z = range(0, count)
-        for i in z:
-            self.x = a[i] * math.cos(t) + 15
-            self.y = b[i] * math.sin(t)
-            self.z = Velocity * t + Distance
-            ListPoint.append(
-                createPointXYZ(x=self.x, y=self.y, z=self.z).asPoint())
-            t += math.pi / 4.0
-
-
 # Functions:
 def a(tmax, Step, component):
     """Inner radius(f) (from center to the beam)"""
@@ -58,12 +42,37 @@ def a(tmax, Step, component):
     return radius
 
 
-def a0(tmax, Step):
-    """center"""
+def odsetep_slupa(t):
+    if (t >= 0 and t < math.pi):
+        return -2 / math.pi * t + 5
+    elif (t >= 1 * math.pi and t < 2 * math.pi):
+        return 1 / math.pi * t + 2
+    elif (t >= 2 * math.pi and t < 3 * math.pi):
+        return -1 / math.pi * t + 6
+    elif (t >= 3 * math.pi and t < 4 * math.pi):
+        return 3
+    elif (t >= 4 * math.pi and t < 5 * math.pi):
+        return -2 / math.pi * t + 12
+
+
+def a_p(tmax, Step, component):
+    """Inner radius(f) (from center to the beam)"""
     radius = []
+
     t = 0
     while t <= tmax:
-        radius.append(0)
+        radius.append((-5 / (4 * math.pi)) * t + 10 - component(t))
+        t += Step
+    return radius
+
+
+def b_p(tmax, Step, component):
+    """Inner radius(f) (from center to the beam)"""
+    radius = []
+
+    t = 0
+    while t <= tmax:
+        radius.append((-5 / (4 * math.pi)) * t + 7.5 - component(t))
         t += Step
     return radius
 
@@ -121,8 +130,8 @@ for i in range(0, n_of_curve):
 # Do przeróbki:
 
 # Do przeróbki:
-Curves(a0(range_a, slow_step), a0(range_b, slow_step), v, pr_height - 0.4,
-       ptList_p[0])
+Curves(a_p(range_a, slow_step, odsetep_slupa),
+       b_p(range_b, slow_step, odsetep_slupa), v, pr_height - 0.4, ptList_p[0])
 # //
 Curves(a(range_a, slow_step, plinth), b(range_b, slow_step, plinth), v,
        ibeam_height, ptList_p[1])
@@ -178,7 +187,8 @@ Curves(a(range_a, slow_step, spacing + plinth),
 Curves(a(range_a, slow_step, 0), b(range_b, slow_step, 0), v, 0, ptList_p[18])
 Curves(a(range_a, slow_step, -br_width), b(range_b, slow_step, -br_width), v,
        0, ptList_p[19])
-Curves(a0(range_a, slow_step), a0(range_b, slow_step), v, 0, ptList_p[20])
+Curves(a_p(range_a, slow_step, odsetep_slupa),
+       b_p(range_b, slow_step, odsetep_slupa), v, 0, ptList_p[20])
 
 size = len(ptList_p[10])
 new_ptList = []
@@ -197,7 +207,7 @@ for Curve in range(0, len(new_ptList)):
     knotPoints = linspace(0, 1, m)
     createCurve3DNurb(controlPoints, knotPoints, deg).asCurve()
 
-for i in range(21, 38):
+for i in range(22, 39):
     _target = apex.EntityCollection()
     part_1 = apex.getPart(pathName="Model/Part 1")
     curve_1 = part_1.getCurve(name="Curve {}".format(i))

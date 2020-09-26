@@ -16,15 +16,28 @@ model_1 = apex.currentModel()
 
 class Elipsa:
     '''Class defining elipses'''
-    def __init__(self, a, b, Height, distance, ListPoint):
+    def __init__(self, a, z, ListPoint):
         t = 0
-        while t <= 2 * math.pi:
-            self.x = a * math.cos(t) + distance
-            self.y = b * math.sin(t)
-            self.z = Height
-            ListPoint.append(
-                createPointXYZ(x=self.x, y=self.y, z=self.z).asPoint())
-            t += 0.2
+        count = len(a)
+        r = range(0, count)
+        for i in r:
+            self.x = 6 * math.cos(t) + 5 + 3 + 6
+            self.y = 3.5 * math.sin(t)
+            ListPoint.append(createPointXYZ(x=self.x, y=self.y, z=z).asPoint())
+            t += math.pi / 24.0
+
+
+class Elipsa_2:
+    '''Class defining elipses'''
+    def __init__(self, a, z, ListPoint):
+        t = 0
+        count = len(a)
+        r = range(0, count)
+        for i in r:
+            self.x = 2 * math.cos(t) + 5 + 3 + 2
+            self.y = math.sin(t)
+            ListPoint.append(createPointXYZ(x=self.x, y=self.y, z=z).asPoint())
+            t += math.pi / 24.0
 
 
 def linspace(low, up, leng):
@@ -37,14 +50,52 @@ def linspace(low, up, leng):
     return list
 
 
+def odsetep_slupa(t):
+    if (t >= 0 and t < math.pi):
+        return -2 / math.pi * t + 4
+    elif (t >= 1 * math.pi and t < 2 * math.pi):
+        return 2 / math.pi * t
+    elif (t >= 2 * math.pi and t < 3 * math.pi):
+        return -2 / math.pi * t + 8
+    elif (t >= 3 * math.pi and t < 4 * math.pi):
+        return 2 / math.pi * t - 4
+    elif (t >= 4 * math.pi and t < 5 * math.pi):
+        return -2 / math.pi * t + 12
+    else:
+        return 2 / math.pi * t - 8
+
+
+def a_p(tmax, Step, component, beginning):
+    """Inner radius(f) (from center to the beam)"""
+    radius = []
+    t = beginning
+    while t <= tmax:
+        radius.append((-5 / (4 * math.pi)) * beginning + 10.0 - component(t))
+        t += Step
+    return radius
+
+
+def b_p(tmax, Step, component, beginning):
+    """Inner radius(f) (from center to the beam)"""
+    radius = []
+    t = beginning
+    while t <= tmax:
+        radius.append((-5 / (4 * math.pi)) * beginning + 7.5 - component(t))
+        t += Step
+    return radius
+
+
 ptList = []
 n_of_curve = 2
+slow_step = math.pi / 24.0
+v = 2.0 / math.pi
 
 for i in range(0, n_of_curve):
     ptList.append([])
 
-Elipsa(3.5, 0.75, 0, 12.5, ptList[0])
-Elipsa(1.75 / 2, 0.75, 10, 9.875, ptList[1])
+Elipsa(a_p(2 * math.pi, slow_step, odsetep_slupa, 0), -1, ptList[0])
+Elipsa_2(a_p(2 * math.pi, slow_step, odsetep_slupa, 0), v * 4 * math.pi + 1,
+         ptList[1])
 
 for elipsa in range(0, len(ptList)):
     Lista = ptList[elipsa]
