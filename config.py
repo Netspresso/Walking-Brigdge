@@ -19,7 +19,8 @@ class Curve():
     range_a = 4.5 * math.pi
     range_b = range_a
     step = 0.1
-    slow_step = 2
+
+    slow_step = math.pi / 4.0
     beam_distance = 1.5
     pr_height = -0.15
     # thats all

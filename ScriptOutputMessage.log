@@ -1,9 +1,2 @@
-Python exception encountered running script.
-Traceback (most recent call last):
-  File "<string>", line 3, in <module>
-  File "D:/workspace/Aksjator/Macros/przepony.py", line 82, in <module>
-    b_p(C.range_b, C.slow_step, odstep_slupa), C.v, C.pr_height - 0.4,
-AttributeError: type object 'Curve' has no attribute 'pr_height'
-
-**************************************
-Output (Prior to Exception):
+File: D:/workspace/Aksjator/Macros/przepony.py 
+Output:
