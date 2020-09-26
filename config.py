@@ -21,4 +21,5 @@ class Curve():
     step = 0.1
     slow_step = 2
     beam_distance = 1.5
+    pr_height = -0.15
     # thats all

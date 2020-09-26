@@ -35,3 +35,16 @@ def linspace(low, up, leng):
         list.append(low)
         low = low + step
     return list
+
+
+def odstep_slupa(t):
+    if (t >= 0 and t < math.pi):
+        return -2 / math.pi * t + 5
+    elif (t >= 1 * math.pi and t < 2 * math.pi):
+        return 1 / math.pi * t + 2
+    elif (t >= 2 * math.pi and t < 3 * math.pi):
+        return -1 / math.pi * t + 6
+    elif (t >= 3 * math.pi and t < 4 * math.pi):
+        return 3
+    elif (t >= 4 * math.pi and t < 5 * math.pi):
+        return -2 / math.pi * t + 12
