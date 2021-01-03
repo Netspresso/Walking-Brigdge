@@ -1,20 +1,8 @@
-# coding: utf-8
-# Macro created by MSC Apex 2020 PRE - Version CLR:722475
-# Macro created on Aug 28, 2020 at 10:22:56
-#
-# Macro Name = powierzchnie przypon
-#
-# Macro Description =
-#
-# Macro Hot Key =
-#
-# Initialize environment for macro execution
-#
-
 import apex
 from apex.construct import Point3D, Point2D
 
-apex.setScriptUnitSystem(unitSystemName=r'''mm-kg-s-N''')
+# Environmental setup
+apex.setScriptUnitSystem(unitSystemName=r'''m-kg-s-N''')
 applicationSettingsGeometry = apex.setting.ApplicationSettingsGeometry()
 applicationSettingsGeometry.createGeometryInNewPart = apex.setting.CreateGeometryInNewPart.CurrentPart
 applicationSettingsGeometry.geometryTessellationIsWatertight = False
@@ -24,16 +12,18 @@ apex.setting.setApplicationSettingsGeometry(
     applicationSettingsGeometry=applicationSettingsGeometry)
 model_1 = apex.currentModel()
 
-#
-# Start of recorded operations
-#
-for i in range(21, 38):
-    _target = apex.EntityCollection()
-    part_1 = apex.getPart(pathName="Model/Part 1")
-    curve_1 = part_1.getCurve(name="Curve {}".format(i))
-    _target.extend(curve_1.getEdges())
-    result = apex.geometry.fillerSurface(target=_target)
+# Steel material creation
+material_1 = apex.catalog.createMaterial(
+    name="Steel",
+    description="Steel with typical properties",
+    color=[255, 77, 64])
+
+material_1.update(elasticModulus=210000000000., )  # Mouł Younga
+
+material_1.update(poissonRatio=0.3, )  # Wspołczynnik Poisson'a
+
+material_1.update(density=8750., )  # Gęstość objętościowa
 
 #
-# Macro recording stopped on Aug 28, 2020 at 10:23:58
+# Macro recording stopped on Oct 21, 2020 at 16:41:22
 #

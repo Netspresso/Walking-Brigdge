@@ -3,10 +3,10 @@ from apex.construct import Point3D, Point2D
 from apex.geometry import createPointXYZ, createCurve3DNurb
 import math
 from config import Curve as C
-from curves import a, b, linspace
+from curves import a, b, linspace, Curves_down, Straight_line, Curves_up
 # import numpy as np
 
-apex.setScriptUnitSystem(unitSystemName=r'''mm-kg-s-N''')
+apex.setScriptUnitSystem(unitSystemName=r'''m-kg-s-N''')
 applicationSettingsGeometry = apex.setting.ApplicationSettingsGeometry()
 applicationSettingsGeometry.createGeometryInNewPart = apex.setting.CreateGeometryInNewPart.CurrentPart
 applicationSettingsGeometry.geometryTessellationIsWatertight = False
@@ -18,55 +18,6 @@ model_1 = apex.currentModel()
 '''Here I began script'''
 ''' Classes '''
 
-
-class Curves_up():
-    '''Class defining upper curves'''
-    def __init__(self, a, b, Velocity, Distance, ListPoint):
-
-        t = 0
-        count = len(a)
-        z = range(0, count)
-        for i in z:
-            self.x = a[i] * math.cos(t) - (5 * t) / (4 * math.pi) + 15
-            self.y = b[i] * math.sin(t)
-            self.z = Velocity * t + Distance
-            ListPoint.append(
-                createPointXYZ(x=self.x, y=self.y, z=self.z).asPoint())
-            t += 0.1
-
-
-class Curves_down():
-    '''Class defining lower curves'''
-    def __init__(self, a, b, Distance, ListPoint):
-
-        t = 0
-        count = len(a)
-        z = range(0, count)
-        for i in z:
-            self.x = a[i] * math.cos(t) - (5 * t) / (4 * math.pi) + 15
-            self.y = b[i] * math.sin(t)
-            if t <= math.pi / 8.0:
-                self.z = 9.6 / math.pi * t - 0.95 + Distance
-            else:
-                self.z = 2.0 / math.pi * t + Distance
-            ListPoint.append(
-                createPointXYZ(x=self.x, y=self.y, z=self.z).asPoint())
-            t += 0.1
-
-
-class Curves_ground():
-    '''Class defining beginning (anchor) part of lower curve'''
-    def __init__(self, component, Distance, ListPoint):
-        x = 9.375
-        while x >= -8.0:
-            self.x = x
-            self.y = 1.875 + component
-            self.z = 9 + Distance
-            ListPoint.append(
-                createPointXYZ(x=self.x, y=self.y, z=self.z).asPoint())
-            x -= 1
-
-
 # Lists of points for all Curves
 ptList = []
 n_of_curve = 18  # count of curves
@@ -77,76 +28,76 @@ for i in range(0, n_of_curve):
 
 # Generating points
 Curves_up(a(C.range_a, C.step, 0), b(C.range_b, C.step, 0), C.v, 0, ptList[0])
-Curves_ground(0, 0, ptList[0])
+Straight_line(0, 0, ptList[0])
 Curves_down(a(C.range_a, C.step, C.plinth), b(C.range_b, C.step, C.plinth),
             C.ibeam_height, ptList[1])
-Curves_ground(C.plinth, C.ibeam_height, ptList[1])
+Straight_line(C.plinth, C.ibeam_height, ptList[1])
 Curves_up(a(C.range_a, C.step, C.plinth + C.spacing),
           b(C.range_b, C.step, C.plinth + C.spacing), C.v, 0, ptList[2])
-Curves_ground(C.plinth + C.spacing, 0, ptList[2])
+Straight_line(C.plinth + C.spacing, 0, ptList[2])
 Curves_down(a(C.range_a, C.step, C.plinth + C.spacing),
             b(C.range_b, C.step, C.plinth + C.spacing), C.ibeam_height,
             ptList[3])
-Curves_ground(C.plinth + C.spacing, C.ibeam_height, ptList[3])
+Straight_line(C.plinth + C.spacing, C.ibeam_height, ptList[3])
 Curves_up(a(C.range_a, C.step, 2.0 * C.spacing + C.plinth),
           b(C.range_b, C.step, 2.0 * C.spacing + C.plinth), C.v, 0, ptList[4])
-Curves_ground(2.0 * C.spacing + C.plinth, 0, ptList[4])
+Straight_line(2.0 * C.spacing + C.plinth, 0, ptList[4])
 Curves_down(a(C.range_a, C.step, 2.0 * C.spacing + C.plinth),
             b(C.range_b, C.step, 2.0 * C.spacing + C.plinth), C.ibeam_height,
             ptList[5])
-Curves_ground(2.0 * C.spacing + C.plinth, C.ibeam_height, ptList[5])
+Straight_line(2.0 * C.spacing + C.plinth, C.ibeam_height, ptList[5])
 Curves_up(a(C.range_a, C.step, 3.0 * C.spacing + 2.0 * C.plinth),
           b(C.range_b, C.step, 3.0 * C.spacing + 2.0 * C.plinth), C.v, 0,
           ptList[6])
-Curves_ground(3.0 * C.spacing + 2.0 * C.plinth, 0, ptList[6])
+Straight_line(3.0 * C.spacing + 2.0 * C.plinth, 0, ptList[6])
 Curves_down(a(C.range_a, C.step, 3.0 * C.spacing + C.plinth),
             b(C.range_b, C.step, 3.0 * C.spacing + C.plinth), C.ibeam_height,
             ptList[7])
-Curves_ground(3.0 * C.spacing + C.plinth, C.ibeam_height, ptList[7])
+Straight_line(3.0 * C.spacing + C.plinth, C.ibeam_height, ptList[7])
 Curves_up(a(C.range_a, C.step, C.beam_distance),
           b(C.range_b, C.step, C.beam_distance), C.v, 0, ptList[8])
-Curves_ground(C.beam_distance, 0, ptList[8])
+Straight_line(C.beam_distance, 0, ptList[8])
 Curves_down(a(C.range_a, C.step, C.beam_distance + C.plinth),
             b(C.range_b, C.step, C.beam_distance + C.plinth), C.obeam_height,
             ptList[9])
-Curves_ground(C.beam_distance + C.plinth, C.obeam_height, ptList[9])
+Straight_line(C.beam_distance + C.plinth, C.obeam_height, ptList[9])
 Curves_up(a(C.range_a, C.step, C.beam_distance + C.plinth + C.spacing),
           b(C.range_b, C.step, C.beam_distance + C.plinth + C.spacing), C.v, 0,
           ptList[10])
-Curves_ground(C.beam_distance + C.plinth + C.spacing, 0, ptList[10])
+Straight_line(C.beam_distance + C.plinth + C.spacing, 0, ptList[10])
 Curves_down(a(C.range_a, C.step, C.beam_distance + C.plinth + C.spacing),
             b(C.range_b, C.step, C.beam_distance + C.plinth + C.spacing),
             C.obeam_height, ptList[11])
-Curves_ground(C.beam_distance + C.plinth + C.spacing, C.obeam_height,
+Straight_line(C.beam_distance + C.plinth + C.spacing, C.obeam_height,
               ptList[11])
 Curves_up(a(C.range_a, C.step, C.beam_distance + C.plinth + 2.0 * C.spacing),
           b(C.range_b, C.step, C.beam_distance + C.plinth + 2.0 * C.spacing),
           C.v, 0, ptList[12])
-Curves_ground(C.beam_distance + C.plinth + 2.0 * C.spacing, 0, ptList[12])
+Straight_line(C.beam_distance + C.plinth + 2.0 * C.spacing, 0, ptList[12])
 Curves_down(a(C.range_a, C.step, C.beam_distance + C.plinth + 2.0 * C.spacing),
             b(C.range_b, C.step, C.beam_distance + C.plinth + 2.0 * C.spacing),
             C.obeam_height, ptList[13])
-Curves_ground(C.beam_distance + C.plinth + 2.0 * C.spacing, C.obeam_height,
+Straight_line(C.beam_distance + C.plinth + 2.0 * C.spacing, C.obeam_height,
               ptList[13])
 Curves_up(
     a(C.range_a, C.step, C.beam_distance + 2.0 * C.plinth + 3.0 * C.spacing),
     b(C.range_b, C.step, C.beam_distance + 2.0 * C.plinth + 3.0 * C.spacing),
     C.v, 0, ptList[14])
-Curves_ground(C.beam_distance + 2.0 * C.plinth + 3.0 * C.spacing, 0,
+Straight_line(C.beam_distance + 2.0 * C.plinth + 3.0 * C.spacing, 0,
               ptList[14])
 Curves_down(a(C.range_a, C.step, C.beam_distance + C.plinth + 3.0 * C.spacing),
             b(C.range_b, C.step, C.beam_distance + C.plinth + 3.0 * C.spacing),
             C.obeam_height, ptList[15])
-Curves_ground(C.beam_distance + C.plinth + 3.0 * C.spacing, C.obeam_height,
+Straight_line(C.beam_distance + C.plinth + 3.0 * C.spacing, C.obeam_height,
               ptList[15])
 Curves_up(a(C.range_a, C.step, C.beam_distance + C.beam_width + C.br_width),
           b(C.range_b, C.step, C.beam_distance + C.beam_width + C.br_width),
           C.v, C.plate_height, ptList[16])
-Curves_ground(C.beam_distance + C.beam_width + C.br_width, C.plate_height,
+Straight_line(C.beam_distance + C.beam_width + C.br_width, C.plate_height,
               ptList[16])
 Curves_up(a(C.range_a, C.step, -C.br_width), b(C.range_b, C.step, -C.br_width),
           C.v, C.plate_height, ptList[17])
-Curves_ground(-C.br_width, C.plate_height, ptList[17])
+Straight_line(-C.br_width, C.plate_height, ptList[17])
 
 #  Creating curves through the points
 for Curve in range(0, len(ptList)):

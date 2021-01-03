@@ -3,9 +3,9 @@ from apex.construct import Point3D, Point2D
 from apex.geometry import createPointXYZ, createCurve3DNurb
 import math
 from config import Curve as C
-from curves import a, b, linspace, odstep_slupa, ap, b_p
+from curves import a, b, linspace, odstep_slupa, ap, b_p, Curves
 
-apex.setScriptUnitSystem(unitSystemName=r'''mm-kg-s-N''')
+apex.setScriptUnitSystem(unitSystemName=r'''m-kg-s-N''')
 applicationSettingsGeometry = apex.setting.ApplicationSettingsGeometry()
 applicationSettingsGeometry.createGeometryInNewPart = apex.setting.CreateGeometryInNewPart.CurrentPart
 applicationSettingsGeometry.geometryTessellationIsWatertight = False
@@ -14,23 +14,6 @@ applicationSettingsGeometry.geometryFaceTesselationTolerance = apex.setting.Geom
 apex.setting.setApplicationSettingsGeometry(
     applicationSettingsGeometry=applicationSettingsGeometry)
 model_1 = apex.currentModel()
-
-
-class Curves:
-    # Class defining curves A
-
-    def __init__(self, a, b, Velocity, Distance, ListPoint):
-        t = 0
-        count = len(a)
-        z = range(0, count)
-        for i in z:
-            self.x = a[i] * math.cos(t) - (5 * t) / (4 * math.pi) + 15
-            self.y = b[i] * math.sin(t)
-            self.z = Velocity * t + Distance
-            ListPoint.append(
-                createPointXYZ(x=self.x, y=self.y, z=self.z).asPoint())
-            t += math.pi / 4.0
-
 
 # functions
 
@@ -45,7 +28,7 @@ for i in range(0, n_of_curve):
 
 # Do przeróbki:
 Curves(ap(C.range_a, C.slow_step, odstep_slupa),
-       b_p(C.range_b, C.slow_step, odstep_slupa), C.v, C.pr_height - 0.4,
+       b_p(C.range_b, C.slow_step, odstep_slupa), C.v, C.pr_height - 2.1,
        ptList_p[0])
 # //
 Curves(a(C.range_a, C.slow_step, C.plinth),
@@ -110,15 +93,19 @@ Curves(a(C.range_a, C.slow_step, 0), b(C.range_b, C.slow_step, 0), C.v, 0,
 Curves(a(C.range_a, C.slow_step, -C.br_width),
        b(C.range_b, C.slow_step, -C.br_width), C.v, 0, ptList_p[19])
 Curves(ap(C.range_a, C.slow_step, odstep_slupa),
-       b_p(C.range_b, C.slow_step, odstep_slupa), C.v, 0, ptList_p[20])
+       b_p(C.range_b, C.slow_step, odstep_slupa), C.v, -1.0, ptList_p[20])
 
-size = len(ptList_p[10])
+size = len(ptList_p[10])  # Wyznacza ilość przepon
 new_ptList = []
 
-for nr_przepony in range(0, size):
-    new_ptList.append([])
+for i in range(0, size):
+    new_ptList.append(
+        []
+    )  # Dodaje do nowej tablicy dokładnie tyle pustych tablic ile jest przepon
     for list in ptList_p:
-        new_ptList[nr_przepony].append(list[nr_przepony])
+        new_ptList[i].append(
+            list[i]
+        )  # Dodaje do tablicy z indeksem [i] znajdującej się w tablicy new_ptList, punkty o indeksie (i) kolejno z każdej tablicy zawartej w tablicy ptList_p
 
 for Curve in range(0, len(new_ptList)):
     Lista = new_ptList[Curve]
@@ -131,7 +118,7 @@ for Curve in range(0, len(new_ptList)):
 
 for i in range(22, 39):
     _target = apex.EntityCollection()
-    part_1 = apex.getPart(pathName="Model/Part 1")
+    part_1 = apex.getPart(pathName="gen/Part 1")
     curve_1 = part_1.getCurve(name="Curve {}".format(i))
     _target.extend(curve_1.getEdges())
     result = apex.geometry.fillerSurface(target=_target)
